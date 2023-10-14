@@ -140,16 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp" />
-    <ClCompile Include="LayerManager.cpp" />
-    <ClCompile Include="src\Camera.cpp" />
-    <ClCompile Include="src\tilemapEditor.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine.h" />
-    <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\UIManager.h" />
-    <ClInclude Include="LayerManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
