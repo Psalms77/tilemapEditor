@@ -1,9 +1,5 @@
 
-
-#include "SFML/Graphics.hpp"
-#include "SFML/System.hpp"
-#include "SFML/Window.hpp"
-#include <iostream>
+#include "Engine.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1600, 900), "2d Tilemap Editor");
