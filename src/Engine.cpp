@@ -14,7 +14,7 @@ void Engine::initVariables() {
 	gridCoord.setFont(font);
 	gridCoord.setPosition(100.f, 100.f);
 	gridCoord.setString("testtest");
-	shape = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
+	//shape = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
 	tileSelector = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
 	tileSelector->setFillColor(sf::Color::Transparent);
 	tileSelector->setOutlineColor(sf::Color::Green);
@@ -90,30 +90,13 @@ void Engine::update() {
 
 	// grid coordination
 	std::stringstream ss;
-	ss << mousePosGrid.x << " " << mousePosGrid.y << "\n"
-		<< mousePosWindow.x << " " << mousePosWindow.y << "\n"
-		<< mousePosView.x << " " << mousePosView.y << "\n";
+	ss << "Current Grid Coordinate: " << mousePosGrid.x << ", " << mousePosGrid.y << "\n";
 	gridCoord.setString(ss.str());
 
 	this->window->setView(this->view);
 	this->pollEvents();
 	// move camera
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))  //left
-	{
-		view.move(-viewSpeed * dt, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))  //right
-	{
-		view.move(viewSpeed * dt, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))  //up
-	{
-		view.move(0.f, -viewSpeed * dt);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))  //down
-	{
-		view.move(0.f, viewSpeed * dt);
-	}
+	this->moveCam();
 
 	mousePosScreen = sf::Mouse::getPosition();
 	mousePosWindow = sf::Mouse::getPosition(*this->window);  //why though
@@ -149,7 +132,7 @@ void Engine::render() {
 			window->draw(tileMap[x][y]);
 		}
 	}
-	this->window->draw(*shape);
+	//this->window->draw(*shape);
 	window->draw(*tileSelector);
 	this->window->setView(this->window->getDefaultView());
 
@@ -163,5 +146,27 @@ void Engine::render() {
 
 }
 
+void Engine::moveCam() {
 
+	// move camera
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))  //left
+	{
+		view.move(-viewSpeed * dt, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))  //right
+	{
+		view.move(viewSpeed * dt, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))  //up
+	{
+		view.move(0.f, -viewSpeed * dt);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))  //down
+	{
+		view.move(0.f, viewSpeed * dt);
+	}
+
+
+
+}
 

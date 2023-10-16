@@ -16,7 +16,6 @@ private:
 	sf::Vector2i mousePosWindow;
 	sf::Vector2f mousePosView;
 	sf::Vector2u mousePosGrid;
-	sf::RectangleShape* shape;
 	float dt;
 	sf::Clock dtClock;
 	sf::Text gridCoord;
@@ -24,8 +23,6 @@ private:
 	sf::RectangleShape* tileSelector;
 
 	//tilemap
-	//int mapSize;
-	//sf::RectangleShape* tileMap[64][64];
 	std::vector<std::vector <sf::RectangleShape>> tileMap;
 	//window
 	sf::RenderWindow* window;
@@ -46,7 +43,7 @@ public:
 	void pollEvents();
 	void update();
 	void render();
-
+	void moveCam();
 
 
 
