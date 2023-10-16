@@ -1,12 +1,41 @@
 #include "Engine.h"
-#include "Inputs.h"
+
 // private functions
 
 //		init
 void Engine::initVariables() {
-	gridSizef = 100.f;
+	gridSizef = 32.f;
 	gridSizeu = static_cast<unsigned>(gridSizef);
+	viewSpeed = 200.f;
+	dt = 0.f;
+	font.loadFromFile(".\\font\\Roboto-Black.ttf");
+	gridCoord.setCharacterSize(24);
+	gridCoord.setFillColor(sf::Color::White);
+	gridCoord.setFont(font);
+	gridCoord.setPosition(100.f, 100.f);
+	gridCoord.setString("testtest");
 	shape = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
+	tileSelector = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
+	tileSelector->setFillColor(sf::Color::Transparent);
+	tileSelector->setOutlineColor(sf::Color::Green);
+	tileSelector->setOutlineThickness(1.f);
+	tileMap.resize(64, std::vector<sf::RectangleShape>());
+
+	for (int x = 0; x < 64; x++)
+	{
+		tileMap[x].resize(64, sf::RectangleShape());
+		for (int y = 0; y < 64; y++)
+		{
+			tileMap[x][y].setSize(sf::Vector2f(gridSizef, gridSizef));
+			tileMap[x][y].setOutlineThickness(1.f);
+			tileMap[x][y].setOutlineColor(sf::Color::Red);
+			tileMap[x][y].setFillColor(sf::Color::Transparent);
+			tileMap[x][y].setPosition(x * gridSizef, y * gridSizef);
+		}
+	}
+
+
+
 	this->window = nullptr;
 }
 void Engine::initWindow() {
@@ -55,40 +84,81 @@ void Engine::pollEvents() {
 }
 
 
-
 void Engine::update() {
+	
+	dt = dtClock.restart().asSeconds();
 
+	// grid coordination
+	std::stringstream ss;
+	ss << mousePosGrid.x << " " << mousePosGrid.y << "\n"
+		<< mousePosWindow.x << " " << mousePosWindow.y << "\n"
+		<< mousePosView.x << " " << mousePosView.y << "\n";
+	gridCoord.setString(ss.str());
+
+	this->window->setView(this->view);
 	this->pollEvents();
+	// move camera
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))  //left
+	{
+		view.move(-viewSpeed * dt, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))  //right
+	{
+		view.move(viewSpeed * dt, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))  //up
+	{
+		view.move(0.f, -viewSpeed * dt);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))  //down
+	{
+		view.move(0.f, viewSpeed * dt);
+	}
+
 	mousePosScreen = sf::Mouse::getPosition();
 	mousePosWindow = sf::Mouse::getPosition(*this->window);  //why though
 	mousePosView = this->window->mapPixelToCoords(mousePosWindow);
 	if (mousePosView.x >= 0.f)
 	{
-		mousePosGrid.x = (mousePosView.y) / gridSizeu;
+		mousePosGrid.x = (mousePosView.x) / gridSizeu;
 	}
 	if (mousePosView.y >= 0.f)
 	{
 		mousePosGrid.y = (mousePosView.y) / gridSizeu;
 	}
-	
-	// render
-	this->window->clear();
-	this->window->setView(this->view);
-	// render elements
-	//this->window->draw();
 	this->window->setView(this->window->getDefaultView());
+	// snap tile selector info
+	tileSelector->setPosition(mousePosGrid.x * gridSizef, mousePosGrid.y * gridSizef);
 
-	// render ui
 
-	this->window->display();
+
 }
 
 
 
 void Engine::render() {
-
+	// render
 	this->window->clear();
+	this->window->setView(this->view);
+	// render elements
+	//this->window->draw();
+	for (int x = 0; x < 64; x++)
+	{
+		for (int y = 0; y < 64; y++)
+		{
+			window->draw(tileMap[x][y]);
+		}
+	}
+	this->window->draw(*shape);
+	window->draw(*tileSelector);
+	this->window->setView(this->window->getDefaultView());
+
+	// render ui
+	window->draw(gridCoord);
+
 	this->window->display();
+	//this->window->clear();
+	//this->window->display();
 
 
 }
