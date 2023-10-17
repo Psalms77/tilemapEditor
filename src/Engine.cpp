@@ -13,7 +13,7 @@ void Engine::initVariables() {
 	// init text
 	font.loadFromFile(".\\font\\Roboto-Black.ttf");
 	gridCoord.setCharacterSize(24);
-	gridCoord.setFillColor(sf::Color::Black);
+	gridCoord.setFillColor(sf::Color::Red);
 	gridCoord.setFont(font);
 	gridCoord.setPosition(100.f, 100.f);
 	gridCoord.setString("testtest");
@@ -76,6 +76,10 @@ void Engine::pollEvents() {
 			this->window->close();
 			break;
 		case sf::Event::KeyReleased:
+			if (this->ev.key.code == sf::Keyboard::O)
+			{
+				saveTileMap();
+			}
 			if (this->ev.key.code == sf::Keyboard::E)
 			{
 				expandBrushSize();
@@ -118,7 +122,7 @@ void Engine::update() {
 	this->window->setView(this->window->getDefaultView());
 	// snap tile selector to grid
 	tileSelector->setPosition(mousePosGrid.x * gridSizef, mousePosGrid.y * gridSizef);
-	tileSelector->setTexture(&defaultTexture);
+	tileSelector->setTexture(&currentTexture);
 	// draw
 	this->paint();
 	this->erase();
@@ -184,7 +188,7 @@ void Engine::moveCam() {
 			{
 				tileMap[x][y].setSize(sf::Vector2f(gridSizef, gridSizef));
 				tileMap[x][y].setOutlineThickness(1.f);
-				tileMap[x][y].setOutlineColor(sf::Color::Red);
+				//tileMap[x][y].setOutlineColor(sf::Color::Red);
 				//tileMap[x][y].setFillColor(sf::Color::Transparent);
 				tileMap[x][y].setPosition(x * gridSizef, y * gridSizef);
 			}
@@ -202,7 +206,7 @@ void Engine::moveCam() {
 			{
 				tileMap[x][y].setSize(sf::Vector2f(gridSizef, gridSizef));
 				tileMap[x][y].setOutlineThickness(1.f);
-				tileMap[x][y].setOutlineColor(sf::Color::Red);
+				//tileMap[x][y].setOutlineColor(sf::Color::Red);
 				//tileMap[x][y].setFillColor(sf::Color::Transparent);
 				tileMap[x][y].setPosition(x * gridSizef, y * gridSizef);
 			}
@@ -278,28 +282,28 @@ void Engine::erase() {
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(NULL);
-			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 10;
-			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 10;
-			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 10;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 0;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 0;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 0;
 		}
 		if (tileSelectorSize == 3)
 		{
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(NULL);
-			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 10;
-			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 10;
-			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 10;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 0;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 0;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 0;
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 2].setTexture(NULL);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y + 2].setTexture(NULL);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 2].setTexture(NULL);
-			tileMapi[mousePosGrid.x + 2][mousePosGrid.y] = 10;
-			tileMapi[mousePosGrid.x][mousePosGrid.y + 2] = 10;
-			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 2] = 10;
-			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 1] = 10;
-			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 2] = 10;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y] = 0;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 2] = 0;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 2] = 0;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 1] = 0;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 2] = 0;
 		}
 	}
 }
@@ -340,54 +344,109 @@ void Engine::shrinkBrushSize() {
 }
 
 void Engine::selectTexture() {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+	{
+		currentTexture = textures[tileMapi[mousePosGrid.x][mousePosGrid.y] - 1];
+		currentTextureID = tileMapi[mousePosGrid.x][mousePosGrid.y];
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
 		currentTexture = textures[0];
-		currentTextureID = 0;
+		currentTextureID = 1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
 		currentTexture = textures[1];
-		currentTextureID = 1;
+		currentTextureID = 2;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
 		currentTexture = textures[2];
-		currentTextureID = 2;
+		currentTextureID = 3;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 	{
 		currentTexture = textures[3];
-		currentTextureID = 3;
+		currentTextureID = 4;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
 	{
 		currentTexture = textures[4];
-		currentTextureID = 4;
+		currentTextureID = 5;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
 	{
 		currentTexture = textures[5];
-		currentTextureID = 5;
+		currentTextureID = 6;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
 	{
 		currentTexture = textures[6];
-		currentTextureID = 6;
+		currentTextureID = 7;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
 	{
 		currentTexture = textures[7];
-		currentTextureID = 7;
+		currentTextureID = 8;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
 	{
 		currentTexture = textures[8];
-		currentTextureID = 8;
+		currentTextureID = 9;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 	{
 		currentTexture = textures[9];
-		currentTextureID = 9;
+		currentTextureID = 10;
+	}
+}
+
+void Engine::saveTileMap() {
+	
+	//std::vector<int> row;
+
+	// open a file for outputting the tilemap
+	std::ofstream outputfile;
+	outputfile.open("tileMapoutput.txt");
+
+	// output the tilemap to the file
+	if (outputfile.is_open()) {
+		for (int row = 0; row < tileMapi.size(); row++) {
+			for (int column = 0; column < tileMapi[row].size(); column++) {
+				if (column != tileMapi[row].size() - 1) {
+					outputfile << tileMapi[row][column] << " ";
+				}
+				else {
+					outputfile << tileMapi[row][column];
+				}
+			}
+			outputfile << std::endl;
+		}
+	}
+
+	outputfile.close();
+
+}
+
+void Engine::loadTileMap() {
+	//std::vector<std::vector<int>> vec;
+
+	std::ifstream file_in("tileMapoutput.txt");
+	if (!file_in) {/*error*/ }
+
+	std::string line;
+	while (std::getline(file_in, line))
+	{
+		std::istringstream ss(line);
+		tileMapi.emplace_back(std::istream_iterator<int>(ss), std::istream_iterator<int>());
+	}
+	for (int x = 0; x < 64; x++)
+	{
+		for (int y = 0; y < 64; y++)
+		{
+			std::cout << std::to_string(tileMapi[x][y]);
+			int t = tileMapi[x][y] - 1;
+			tileMap[x][y].setTexture(&textures[t]);
+		}
 	}
 }

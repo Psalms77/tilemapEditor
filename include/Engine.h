@@ -5,6 +5,9 @@
 #include "sstream"
 #include <iostream>
 #include <string>
+#include <vector>
+#include <fstream>
+
 
 class Engine
 {
@@ -66,6 +69,8 @@ public:
 	void shrinkBrushSize();
 	void loadAssets();
 	void selectTexture();
+	void saveTileMap();
+	void loadTileMap();
 
 };
 
