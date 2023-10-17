@@ -32,10 +32,12 @@ private:
 	sf::RectangleShape* tileSelector;
 	int tileSelectorSize;
 	sf::Texture currentTexture;
+	int currentTextureID;
 	sf::Sprite currentSprite;
 	
 
 	//tilemap
+	std::vector<std::vector<int>> tileMapi;
 	std::vector<std::vector <sf::RectangleShape>> tileMap;
 	//window
 	sf::RenderWindow* window;

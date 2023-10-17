@@ -24,11 +24,14 @@ void Engine::initVariables() {
 	tileSelector->setOutlineThickness(1.f);
 	// init tilemap
 	tileMap.resize(64, std::vector<sf::RectangleShape>());
+	tileMapi.resize(64, std::vector<int>());
 	for (int x = 0; x < 64; x++)
 	{
 		tileMap[x].resize(64, sf::RectangleShape());
+		tileMapi[x].resize(64, int());
 		for (int y = 0; y < 64; y++)
 		{
+			tileMapi[x][y] = 0;
 			tileMap[x][y].setSize(sf::Vector2f(gridSizef, gridSizef));
 			//tileMap[x][y].setOutlineThickness(1.f);
 			//tileMap[x][y].setOutlineColor(sf::Color::Red);
@@ -230,23 +233,36 @@ void Engine::paint() {
 		sf::Texture* copyTexture = new sf::Texture();
 		copyTexture->loadFromImage(copyImage);
 		tileMap[mousePosGrid.x][mousePosGrid.y].setTexture(copyTexture);
+		tileMapi[mousePosGrid.x][mousePosGrid.y] = currentTextureID;
+
 
 		if (tileSelectorSize == 2)
 		{
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(copyTexture);
 			tileMap[mousePosGrid.x ][mousePosGrid.y + 1].setTexture(copyTexture);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(copyTexture);
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = currentTextureID;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = currentTextureID;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = currentTextureID;
 		}
 		if (tileSelectorSize == 3)
 		{
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(copyTexture);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 1].setTexture(copyTexture);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(copyTexture);
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = currentTextureID;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = currentTextureID;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = currentTextureID;
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y].setTexture(copyTexture);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 2].setTexture(copyTexture);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y + 2].setTexture(copyTexture);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y +1].setTexture(copyTexture);
 			tileMap[mousePosGrid.x+1][mousePosGrid.y + 2].setTexture(copyTexture);
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y] = currentTextureID;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 2] = currentTextureID;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 2] = currentTextureID;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 1] = currentTextureID;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 2] = currentTextureID;
 		}
 	}
 
@@ -262,17 +278,28 @@ void Engine::erase() {
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(NULL);
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 10;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 10;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 10;
 		}
 		if (tileSelectorSize == 3)
 		{
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 1].setTexture(NULL);
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y] = 10;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 1] = 10;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 1] = 10;
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y].setTexture(NULL);
 			tileMap[mousePosGrid.x][mousePosGrid.y + 2].setTexture(NULL);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y + 2].setTexture(NULL);
 			tileMap[mousePosGrid.x + 2][mousePosGrid.y + 1].setTexture(NULL);
 			tileMap[mousePosGrid.x + 1][mousePosGrid.y + 2].setTexture(NULL);
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y] = 10;
+			tileMapi[mousePosGrid.x][mousePosGrid.y + 2] = 10;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 2] = 10;
+			tileMapi[mousePosGrid.x + 2][mousePosGrid.y + 1] = 10;
+			tileMapi[mousePosGrid.x + 1][mousePosGrid.y + 2] = 10;
 		}
 	}
 }
@@ -315,42 +342,52 @@ void Engine::shrinkBrushSize() {
 void Engine::selectTexture() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
-		currentTexture = textures[1];
+		currentTexture = textures[0];
+		currentTextureID = 0;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 	{
-		currentTexture = textures[2];
+		currentTexture = textures[1];
+		currentTextureID = 1;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 	{
-		currentTexture = textures[3];
+		currentTexture = textures[2];
+		currentTextureID = 2;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
 	{
-		currentTexture = textures[4];
+		currentTexture = textures[3];
+		currentTextureID = 3;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
 	{
-		currentTexture = textures[5];
+		currentTexture = textures[4];
+		currentTextureID = 4;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
 	{
-		currentTexture = textures[6];
+		currentTexture = textures[5];
+		currentTextureID = 5;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num7))
 	{
-		currentTexture = textures[7];
+		currentTexture = textures[6];
+		currentTextureID = 6;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num8))
 	{
-		currentTexture = textures[8];
+		currentTexture = textures[7];
+		currentTextureID = 7;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num9))
 	{
-		currentTexture = textures[9];
+		currentTexture = textures[8];
+		currentTextureID = 8;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 	{
-		currentTexture = textures[0];
+		currentTexture = textures[9];
+		currentTextureID = 9;
 	}
 }
