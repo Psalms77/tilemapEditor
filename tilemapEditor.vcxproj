@@ -141,11 +141,9 @@
   <ItemGroup>
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\UIManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engine.h" />
-    <ClInclude Include="include\UIManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
