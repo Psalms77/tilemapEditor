@@ -4,6 +4,7 @@
 #include "SFML/Window.hpp"
 #include "sstream"
 #include <iostream>
+#include <string>
 
 class Engine
 {
@@ -20,7 +21,19 @@ private:
 	sf::Clock dtClock;
 	sf::Text gridCoord;
 	sf::Font font;
+	// sprite & texture containers
+	//std::vector<sf::Sprite> sprites;
+	std::vector<sf::Texture> textures;
+	sf::Texture defaultTexture;
+	sf::Sprite defaultSprite;
+	std::string tempStr;
+
+	// tile selector
 	sf::RectangleShape* tileSelector;
+	int tileSelectorSize;
+	sf::Texture currentTexture;
+	sf::Sprite currentSprite;
+	
 
 	//tilemap
 	std::vector<std::vector <sf::RectangleShape>> tileMap;
@@ -44,8 +57,13 @@ public:
 	void update();
 	void render();
 	void moveCam();
-
-
+	void getMouseInfo();
+	void paint();
+	void erase();
+	void expandBrushSize();
+	void shrinkBrushSize();
+	void loadAssets();
+	void selectTexture();
 
 };
 
