@@ -80,6 +80,10 @@ void Engine::pollEvents() {
 			{
 				saveTileMap();
 			}
+			if (this->ev.key.code == sf::Keyboard::I)
+			{
+				loadTileMap();
+			}
 			if (this->ev.key.code == sf::Keyboard::E)
 			{
 				expandBrushSize();
@@ -109,7 +113,11 @@ void Engine::update() {
 
 	// grid coordination
 	std::stringstream ss;
-	ss << "Current Grid Coordinate: " << mousePosGrid.x << ", " << mousePosGrid.y << "\n";
+	ss << "Current Mouse Grid Coordinate: " << mousePosGrid.x << ", " << mousePosGrid.y << "\n"
+		<< "W, A, S, D - Move Cam" << " | " << "Press Equal and Hyphen to Zoom in or out "<<"\n"
+		<<"Q, E - Adjust BrushSize" << " | "<< "I, O - Load or Save current Tilemap"<<"\n"
+		<<"Left Click to Paint"<<" | Right Click to Erase"<<"\n"
+		<<"Press scroll wheel as eyedropper tool";
 	gridCoord.setString(ss.str());
 
 	this->window->setView(this->view);
@@ -311,8 +319,7 @@ void Engine::erase() {
 void Engine::loadAssets() {
 	
 	//defaultSprite.setColor(sf::Color::Transparent);
-	defaultTexture.loadFromFile(".\\img\\tiles5.png");
-	//defaultTexture.loadFromFile(".\\img\\tiles5.png");
+	defaultTexture.loadFromFile(".\\img\\tiles10.png");
 	currentSprite = defaultSprite;
 	currentTexture = defaultTexture;
 	textures.resize(10, sf::Texture());
@@ -397,7 +404,7 @@ void Engine::selectTexture() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 	{
 		currentTexture = textures[9];
-		currentTextureID = 10;
+		currentTextureID = 0;
 	}
 }
 
@@ -429,7 +436,7 @@ void Engine::saveTileMap() {
 }
 
 void Engine::loadTileMap() {
-	//std::vector<std::vector<int>> vec;
+	std::vector<std::vector<int>> vec;
 
 	std::ifstream file_in("tileMapoutput.txt");
 	if (!file_in) {/*error*/ }
@@ -438,15 +445,24 @@ void Engine::loadTileMap() {
 	while (std::getline(file_in, line))
 	{
 		std::istringstream ss(line);
-		tileMapi.emplace_back(std::istream_iterator<int>(ss), std::istream_iterator<int>());
+		std::cout << line;
+		vec.emplace_back(std::istream_iterator<int>(ss), std::istream_iterator<int>());
 	}
 	for (int x = 0; x < 64; x++)
 	{
 		for (int y = 0; y < 64; y++)
 		{
-			std::cout << std::to_string(tileMapi[x][y]);
-			int t = tileMapi[x][y] - 1;
-			tileMap[x][y].setTexture(&textures[t]);
+			std::cout << std::to_string(vec[x][y]);
+			;
+			if (vec[x][y]> 0)
+			{
+				tileMapi[x][y] = vec[x][y];
+				tileMap[x][y].setTexture(&textures[vec[x][y]]);
+			}
+			if (vec[x][y] == 0)
+			{
+				tileMap[x][y].setTexture(&textures[9]);
+			}
 		}
 	}
 }

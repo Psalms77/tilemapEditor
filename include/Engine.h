@@ -37,7 +37,10 @@ private:
 	sf::Texture currentTexture;
 	int currentTextureID;
 	sf::Sprite currentSprite;
-	
+	// other ui elements
+	std::vector<sf::RectangleShape> tileSlots;
+	std::vector<sf::Text> slotText;
+
 
 	//tilemap
 	std::vector<std::vector<int>> tileMapi;
