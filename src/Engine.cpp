@@ -15,7 +15,7 @@ void Engine::initVariables() {
 	gridCoord.setCharacterSize(24);
 	gridCoord.setFillColor(sf::Color::Red);
 	gridCoord.setFont(font);
-	gridCoord.setPosition(100.f, 100.f);
+	gridCoord.setPosition(20.f, 20.f);
 	gridCoord.setString("testtest");
 	// init tile selector
 	tileSelector = new sf::RectangleShape(sf::Vector2f(gridSizef, gridSizef));
@@ -108,16 +108,13 @@ void Engine::pollEvents() {
 void Engine::update() {
 	
 	dt = dtClock.restart().asSeconds();
-
-
-
 	// grid coordination
 	std::stringstream ss;
 	ss << "Current Mouse Grid Coordinate: " << mousePosGrid.x << ", " << mousePosGrid.y << "\n"
 		<< "W, A, S, D - Move Cam" << " | " << "Press Equal and Hyphen to Zoom in or out "<<"\n"
 		<<"Q, E - Adjust BrushSize" << " | "<< "I, O - Load or Save current Tilemap"<<"\n"
 		<<"Left Click to Paint"<<" | Right Click to Erase"<<"\n"
-		<<"Press scroll wheel as eyedropper tool";
+		<<"Press scroll wheel as eyedropper tool"<< " | Press Num Button to Select Tile";
 	gridCoord.setString(ss.str());
 
 	this->window->setView(this->view);
@@ -158,7 +155,7 @@ void Engine::render() {
 
 	// render ui
 	window->draw(gridCoord);
-
+	tileSlotUI();
 	this->window->display();
 
 
@@ -353,8 +350,11 @@ void Engine::shrinkBrushSize() {
 void Engine::selectTexture() {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
 	{
-		currentTexture = textures[tileMapi[mousePosGrid.x][mousePosGrid.y] - 1];
-		currentTextureID = tileMapi[mousePosGrid.x][mousePosGrid.y];
+		if (tileMapi[mousePosGrid.x][mousePosGrid.y] != 0)
+		{
+			currentTexture = textures[tileMapi[mousePosGrid.x][mousePosGrid.y] - 1 ];
+			currentTextureID = tileMapi[mousePosGrid.x][mousePosGrid.y];
+		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
 	{
@@ -465,4 +465,84 @@ void Engine::loadTileMap() {
 			}
 		}
 	}
+}
+
+void Engine::tileSlotUI() {
+
+	slotText.setCharacterSize(24.f);
+	slotText.setFont(font);
+	slotText.setPosition(50.f, 720.f);
+	slotText.setFillColor(sf::Color::Blue);
+	slotText.setString("Num    1           Num   2           Num   3            Num   4            Num   5           Num   6            Num   7           Num   8           Num   9           Num   0");
+	window->draw(slotText);
+
+	tileSlot1 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot1->setOutlineThickness(5.f);
+	tileSlot1->setOutlineColor(sf::Color::Blue);
+	tileSlot1->setTexture(&textures[0]);
+	tileSlot1->setPosition(50.f, 750.f);
+	window->draw(*tileSlot1);
+
+	tileSlot2 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot2->setOutlineThickness(5.f);
+	tileSlot2->setOutlineColor(sf::Color::Blue);
+	tileSlot2->setTexture(&textures[1]);
+	tileSlot2->setPosition(200.f, 750.f);
+	window->draw(*tileSlot2);
+
+	tileSlot3 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot3->setOutlineThickness(5.f);
+	tileSlot3->setOutlineColor(sf::Color::Blue);
+	tileSlot3->setTexture(&textures[2]);
+	tileSlot3->setPosition(350.f, 750.f);
+	window->draw(*tileSlot3);
+
+	tileSlot4 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot4->setOutlineThickness(5.f);
+	tileSlot4->setOutlineColor(sf::Color::Blue);
+	tileSlot4->setTexture(&textures[3]);
+	tileSlot4->setPosition(500.f, 750.f);
+	window->draw(*tileSlot4);
+
+	tileSlot5 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot5->setOutlineThickness(5.f);
+	tileSlot5->setOutlineColor(sf::Color::Blue);
+	tileSlot5->setTexture(&textures[4]);
+	tileSlot5->setPosition(650.f, 750.f);
+	window->draw(*tileSlot5);
+
+	tileSlot6 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot6->setOutlineThickness(5.f);
+	tileSlot6->setOutlineColor(sf::Color::Blue);
+	tileSlot6->setTexture(&textures[5]);
+	tileSlot6->setPosition(800.f, 750.f);
+	window->draw(*tileSlot6);
+
+	tileSlot7 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot7->setOutlineThickness(5.f);
+	tileSlot7->setOutlineColor(sf::Color::Blue);
+	tileSlot7->setTexture(&textures[6]);
+	tileSlot7->setPosition(950.f, 750.f);
+	window->draw(*tileSlot7);
+
+	tileSlot8 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot8->setOutlineThickness(5.f);
+	tileSlot8->setOutlineColor(sf::Color::Blue);
+	tileSlot8->setTexture(&textures[7]);
+	tileSlot8->setPosition(1100.f, 750.f);
+	window->draw(*tileSlot8);
+
+	tileSlot9 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot9->setOutlineThickness(5.f);
+	tileSlot9->setOutlineColor(sf::Color::Blue);
+	tileSlot9->setTexture(&textures[8]);
+	tileSlot9->setPosition(1250.f, 750.f);
+	window->draw(*tileSlot9);
+
+	tileSlot0 = new sf::RectangleShape(sf::Vector2f(100.f, 100.f));
+	tileSlot0->setOutlineThickness(5.f);
+	tileSlot0->setOutlineColor(sf::Color::Blue);
+	tileSlot0->setTexture(&textures[9]);
+	tileSlot0->setPosition(1400.f, 750.f);
+	window->draw(*tileSlot0);
 }

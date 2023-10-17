@@ -38,8 +38,17 @@ private:
 	int currentTextureID;
 	sf::Sprite currentSprite;
 	// other ui elements
-	std::vector<sf::RectangleShape> tileSlots;
-	std::vector<sf::Text> slotText;
+	sf::RectangleShape* tileSlot1;
+	sf::RectangleShape* tileSlot2;
+	sf::RectangleShape* tileSlot3;
+	sf::RectangleShape* tileSlot4;
+	sf::RectangleShape* tileSlot5;
+	sf::RectangleShape* tileSlot6;
+	sf::RectangleShape* tileSlot7;
+	sf::RectangleShape* tileSlot8;
+	sf::RectangleShape* tileSlot9;
+	sf::RectangleShape* tileSlot0;
+	sf::Text slotText;
 
 
 	//tilemap
@@ -74,6 +83,6 @@ public:
 	void selectTexture();
 	void saveTileMap();
 	void loadTileMap();
-
+	void tileSlotUI();
 };
 
